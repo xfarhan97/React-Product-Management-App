@@ -1,28 +1,46 @@
-// src/pages/ProductList.jsx
 import { useContext, useState } from "react";
 import { ProductContext } from "../context/ProductContext";
 import { useNavigate } from "react-router-dom";
 
 const ProductList = () => {
-  const { products, deleteProduct } = useContext(ProductContext);
+  const { products, deleteProduct, loading, error } = useContext(ProductContext);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  // Filter products based on search term
-  const filteredProducts = products.filter(product =>
+  // ✅ Filter products safely
+  const filteredProducts = (products || []).filter(product =>
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-if (!products || products.length === 0) {
-  return <h2>Loading Products...</h2>;
-}
+  // ✅ Loading state
+  if (loading) {
+    return <h2 style={{ textAlign: "center", marginTop: "50px" }}>Loading Products...</h2>;
+  }
+
+  // ✅ Error state
+  if (error) {
+    return <h2 style={{ textAlign: "center", marginTop: "50px", color: "red" }}>{error}</h2>;
+  }
 
   return (
     <div style={{ maxWidth: "1200px", margin: "30px auto", padding: "0 20px" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "30px" }}>Products</h1>
+      
+      {/* Heading */}
+      <h1 style={{ textAlign: "center", marginBottom: "30px" }}>
+        Products 🛒
+      </h1>
 
-      {/* Top Bar: Add Product + Search */}
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "30px" }}>
+      {/* Top Bar */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "30px",
+          flexWrap: "wrap",
+          gap: "10px"
+        }}
+      >
+        {/* Add Button */}
         <button
           onClick={() => navigate("/add")}
           style={{
@@ -38,6 +56,7 @@ if (!products || products.length === 0) {
           + Add New Product
         </button>
 
+        {/* Search Input */}
         <input
           type="text"
           placeholder="Search products..."
@@ -53,7 +72,7 @@ if (!products || products.length === 0) {
         />
       </div>
 
-      {/* Products Grid */}
+      {/* Product Grid */}
       <div
         style={{
           display: "grid",
@@ -62,7 +81,9 @@ if (!products || products.length === 0) {
         }}
       >
         {filteredProducts.length === 0 ? (
-          <p style={{ gridColumn: "1 / -1", textAlign: "center" }}>No products found.</p>
+          <p style={{ gridColumn: "1 / -1", textAlign: "center" }}>
+            No products found ❌
+          </p>
         ) : (
           filteredProducts.map(product => (
             <div
@@ -77,21 +98,36 @@ if (!products || products.length === 0) {
                 backgroundColor: "#fff"
               }}
             >
-              {/* Product Image */}
+              {/* Image */}
               <img
                 src={product.thumbnail}
                 alt={product.title}
-                style={{ width: "100%", height: "180px", objectFit: "cover" }}
+                style={{
+                  width: "100%",
+                  height: "180px",
+                  objectFit: "cover"
+                }}
               />
 
-              {/* Product Info */}
+              {/* Info */}
               <div style={{ padding: "15px", flexGrow: 1 }}>
-                <h3 style={{ margin: "0 0 10px 0" }}>{product.title}</h3>
-                <p style={{ margin: 0, fontWeight: "bold" }}>${product.price}</p>
+                <h3 style={{ margin: "0 0 10px 0" }}>
+                  {product.title}
+                </h3>
+                <p style={{ margin: 0, fontWeight: "bold" }}>
+                  ${product.price}
+                </p>
               </div>
 
-              {/* Action Buttons */}
-              <div style={{ display: "flex", justifyContent: "space-around", padding: "10px" }}>
+              {/* Buttons */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  padding: "10px"
+                }}
+              >
+                {/* Edit */}
                 <button
                   onClick={() => navigate(`/edit/${product.id}`)}
                   style={{
@@ -100,13 +136,13 @@ if (!products || products.length === 0) {
                     color: "#fff",
                     border: "none",
                     borderRadius: "5px",
-                    cursor: "pointer",
-                    fontSize: "14px"
+                    cursor: "pointer"
                   }}
                 >
                   Edit
                 </button>
 
+                {/* Delete */}
                 <button
                   onClick={() => {
                     if (window.confirm("Are you sure you want to delete this product?")) {
@@ -119,13 +155,13 @@ if (!products || products.length === 0) {
                     color: "#fff",
                     border: "none",
                     borderRadius: "5px",
-                    cursor: "pointer",
-                    fontSize: "14px"
+                    cursor: "pointer"
                   }}
                 >
                   Delete
                 </button>
 
+                {/* View */}
                 <button
                   onClick={() => navigate(`/product/${product.id}`)}
                   style={{
@@ -134,8 +170,7 @@ if (!products || products.length === 0) {
                     color: "#fff",
                     border: "none",
                     borderRadius: "5px",
-                    cursor: "pointer",
-                    fontSize: "14px"
+                    cursor: "pointer"
                   }}
                 >
                   View
