@@ -13,6 +13,10 @@ const ProductList = () => {
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+if (!products || products.length === 0) {
+  return <h2>Loading Products...</h2>;
+}
+
   return (
     <div style={{ maxWidth: "1200px", margin: "30px auto", padding: "0 20px" }}>
       <h1 style={{ textAlign: "center", marginBottom: "30px" }}>Products</h1>

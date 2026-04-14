@@ -8,7 +8,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<h1>HOME TEST ✅</h1>} />
+        {/* HOME PAGE */}
+        <Route path="/" element={<ProductList />} />
+
+        {/* OTHER PAGES */}
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/add" element={<AddProduct />} />
+        <Route path="/edit/:id" element={<EditProduct />} />
       </Routes>
     </BrowserRouter>
   );

@@ -18,8 +18,13 @@ export const ProductProvider = ({ children }) => {
     fetchProducts();
   }, []);
 
+  // ✅ ADD THIS
+  const deleteProduct = (id) => {
+    setProducts(products.filter(p => p.id !== id));
+  };
+
   return (
-    <ProductContext.Provider value={{ products, search, setSearch }}>
+    <ProductContext.Provider value={{ products, search, setSearch, deleteProduct }}>
       {children}
     </ProductContext.Provider>
   );
